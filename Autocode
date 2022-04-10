@@ -1,0 +1,52 @@
+// authenticates you with the API standard library
+// type `await lib.` to display API autocomplete
+const lib = require('lib')({token: process.env.STDLIB_SECRET_TOKEN});
+const {registerFont, createCanvas, loadImage} = require('canvas')
+
+// setting and importing fonts
+const comicsans = require('@canvas-fonts/comic-sans-ms')
+registerFont(comicsans, {family: 'Comic Sans'})
+
+// setting up canvas
+const canvas = createCanvas(400, 200)
+const ctx = canvas.getContext('2d')
+
+// fill in the rectangle
+ctx.fillStyle = "Red"
+ctx.fillRect(0, 0, canvas.width, canvas.height)
+
+
+// adding text
+ctx.font = 'bold 30px "Comic Sans"'
+ctx.fillStyle = "Black"
+ctx.textAlign = "center"
+ctx.fillText("Welcome", 180, 140)
+ctx.fillText(context.params.event.event.username, 180, 165)
+
+// get the users info
+let user = await lib.discord.users['@0.2.1'].retrieve({
+  user_id: context.params.event.user.id
+});
+
+// get Avatar url
+let avatar_url = user.avatar_url
+?`https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`
+:`https://discordapp.com/assets/322c936a8c8be1b803cd94861bdfa868.png`;
+
+// Then we'll download the image into Autocode
+// Once it's downloaded we'll overlay it onto our welcome message
+let image = await loadImage(avatar_url);
+ctx.drawImage(image, 150, 25, 70, 70);
+
+
+
+return lib.discord.channels['@0.3.1'].messages.create({
+  channel_id: `961090217610203199`,
+  content: ` `,
+  attachments: [
+    {
+      'file': canvas.toBuffer(),
+      'filename': `welcome.png`
+    }
+  ]
+});
